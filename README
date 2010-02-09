@@ -13,4 +13,9 @@ hashes1_to_hashes2.php
 ~~~~~~~~~~~~~~~~~~~~~~
 convert shimmie2-beta style "images/bl/blah.jpg" to "images/bl/blah"
 
+init_dev.sh
+~~~~~~~~~~~
+creates a tree of installations suitable for unit testing (one install for
+each combination of stable/dev and mysql/pgsql/sqlite, with wipe-and-reinstall
+scripts to clean up after testing)
 
