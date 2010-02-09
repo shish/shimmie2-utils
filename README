@@ -19,6 +19,10 @@ creates a tree of installations suitable for unit testing (one install for
 each combination of stable/dev and mysql/pgsql/sqlite, with wipe-and-reinstall
 scripts to clean up after testing)
 
+fix_sizes.php
+~~~~~~~~~~~~~
+Fix the database in cases where the height/width/filesize were listed as zero
+
 cli_import.php [OLD]
 ~~~~~~~~~~~~~~~~~~~~
 Like the "bulk add" extension, but works from the command line.
