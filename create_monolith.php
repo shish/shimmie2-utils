@@ -88,7 +88,8 @@ function get_prio($text) {
 function get_ext($text) {
 	$matches = array();
 	preg_match('#\nclass (.*) (extends|implements) .*Extension#m', $text, $matches);
-	return $matches[1];
+	if($matches) return $matches[1];
+	else return null;
 }
 
 function invert_map($map) {
