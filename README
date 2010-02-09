@@ -1,0 +1,16 @@
+
+create_monolith.php
+~~~~~~~~~~~~~~~~~~~
+run from the root of a shimmie install; it will output monolith.php, a single
+file containing all shimmie code and active extensions (but not /lib/*); it will
+also have comments stripped and various static optimisations applied.
+
+ids_to_hashes2.php
+~~~~~~~~~~~~~~~~~~
+convert shimmie1 style "images/123.jpg" to shimmie2 style "images/24/24a7b..."
+
+hashes1_to_hashes2.php
+~~~~~~~~~~~~~~~~~~~~~~
+convert shimmie2-beta style "images/bl/blah.jpg" to "images/bl/blah"
+
+
