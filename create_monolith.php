@@ -116,8 +116,9 @@ assert_options(ASSERT_BAIL, 1);
 $files = array_merge(
 	glob("core/*.php"),
 	glob("ext/*/main.php"),
+	glob("themes/".THEME."/*.class.php"),
 	glob("ext/*/theme.php"),
-	glob("themes/".THEME."/*.php")
+	glob("themes/".THEME."/*.theme.php")
 	);
 
 $routes = array();
