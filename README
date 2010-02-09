@@ -19,3 +19,8 @@ creates a tree of installations suitable for unit testing (one install for
 each combination of stable/dev and mysql/pgsql/sqlite, with wipe-and-reinstall
 scripts to clean up after testing)
 
+cli_import.php [OLD]
+~~~~~~~~~~~~~~~~~~~~
+Like the "bulk add" extension, but works from the command line.
+- Last updated in the 2.1 era, won't work with current versions, but might be
+  useful as a base if anyone wants to create an updated version
