@@ -1,4 +1,15 @@
 <html>
+<!--
+Note:
+this assumes that your install tree is like so
+
+.../coverage.php
+.../2.3m/<shimmie install for 2.3 using MySQL>
+.../2.3m/data/coverage/<xdebug coverage logs>
+
+this is the type of tree you should end up with if you use the
+init_dev.sh script
+-->
 	<head>
 		<title>XDebug Coverage Viewer</title>
 		<style>
