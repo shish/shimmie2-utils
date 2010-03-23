@@ -71,7 +71,7 @@ function clean() {
 	if [ "\$DB_TYPE" == "s" ] ; then
 		rm -f \$DB_NAME.sdb
 	elif [ "\$DB_TYPE" == "m" ] ; then
-		mysqldump -u\$DB_USER -p\$DB_PASS --add-drop-table --no-data \$DB_NAME | grep ^DROP | mysql -u\$DB_USER -p\$DB_PASS \$DB_NAME
+		(echo "set foreign_key_checks=off;" && mysqldump -u\$DB_USER -p\$DB_PASS --add-drop-table --no-data \$DB_NAME | grep ^DROP) | mysql -u\$DB_USER -p\$DB_PASS \$DB_NAME
 	elif [ "\$DB_TYPE" == "p" ] ; then
 		export PGPASSWORD=\$DB_PASS
 		pg_dump -U\$DB_USER \$DB_NAME | grep ^DROP | psql -U\$DB_USER \$DB_NAME
