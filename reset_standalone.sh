@@ -28,7 +28,7 @@ GREEN="e[01;32m"
 CLEAR="e[0m"
 
 function ok() { printf " ${GREEN}done${CLEAR}n" ; }
-function not() { printf " ${RED}failed${CLEAR}n" ; exit ; }
+function not() { printf " ${RED}failed${CLEAR}n" ; exit 1 ; }
 
 
 function clean() {
@@ -43,7 +43,7 @@ function clean() {
 		pg_dump -U$DB_USER $DB_NAME | grep ^DROP | psql -U$DB_USER $DB_NAME
 	else
 		printf " ${RED}invalid database type${CLEAR}n"
-		exit
+		exit 1
 	fi
 }
 
@@ -57,7 +57,7 @@ function create_conf() {
 		echo "pgsql://$DB_USER:$DB_PASS@$DB_HOST/$DB_NAME?persist" > auto_install.conf
 	else
 		printf " ${RED}invalid database type${CLEAR}n"
-		exit
+		exit 1
 	fi
 }
 
@@ -81,3 +81,5 @@ clean        && ok || not
 create_conf  && ok || not
 install_base && ok || not
 create_users && ok || not
+
+exit 0
