@@ -31,3 +31,9 @@ echo "Creating database users"
 sudo -u postgres psql -c "create user shimmie with password 'shimmie' createdb;"
 sudo mysql -uroot -pshimmie -e "create user 'shimmie'@'localhost' identified by 'shimmie'";
 sudo mysql -uroot -pshimmie -e "grant all on *.* to 'shimmie'@'localhost'";
+
+echo "Configuring web server"
+sudo rm -f /etc/nginx/sites-enabled/default
+sudo cp -f shimmie2-utils/shimtest.nginx.conf /etc/nginx/sites-available
+sudo ln -sf /etc/nginx/sites-available/shimtest /etc/nginx/sites-enabled/shimtest
+sudo /etc/init.d/nginx reload
