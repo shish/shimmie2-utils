@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# postgresql mysql-server apache2-mpm-itk apache2-mod-php5 php5-gd php5-mysql php5-pgsql curl wget git-core
-# screen vim sudo
-
 echo "Checking out source code..."
-git clone git://git.shishnet.org/shimmie2.git 2.Xm
+git clone git@github.com:shish/shimmie2.git 2.Xm
 cp -r 2.Xm 2.Xp
 cp -r 2.Xm 2.Xs
 

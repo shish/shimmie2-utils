@@ -16,8 +16,8 @@
 HOST=`hostname`                                # domain name of the installations
 CWD=`pwd`
 DIR=`basename $CWD`                            # install path relative to webroot
-DB_TYPE=`echo $DIR | sed "s/.*(.)/1/g"`     # last letter, eg "s", "m", or "p"
-DB_NAME=s`echo $DIR | sed "s/[^a-z0-9]//g"`  # install path should be uniqueish
+DB_TYPE=`echo $DIR | sed "s/.*(.)/1/g"`        # last letter, eg "s", "m", or "p"
+DB_NAME=s`echo $DIR | sed "s/[^a-z0-9]//g"`    # install path should be uniqueish
 DB_HOST="localhost"
 DB_USER="shimmie"
 DB_PASS="shimmie"
@@ -50,11 +50,11 @@ function clean() {
 function create_conf() {
 	echo -n "Creating auto_install.conf..."
 	if [ "$DB_TYPE" == "s" ] ; then
-		echo "sqlite://$DB_NAME.sdb" > auto_install.conf
+		echo "sqlite:$DB_NAME.sdb" > auto_install.conf
 	elif [ "$DB_TYPE" == "m" ] ; then
-		echo "mysql://$DB_USER:$DB_PASS@$DB_HOST/$DB_NAME?persist" > auto_install.conf
+		echo "mysql:user=$DB_USER;password=$DB_PASS;host=$DB_HOST;dbname=$DB_NAME" > auto_install.conf
 	elif [ "$DB_TYPE" == "p" ] ; then
-		echo "pgsql://$DB_USER:$DB_PASS@$DB_HOST/$DB_NAME?persist" > auto_install.conf
+		echo "pgsql:user=$DB_USER;password=$DB_PASS;host=$DB_HOST;dbname=$DB_NAME" > auto_install.conf
 	else
 		printf " ${RED}invalid database type${CLEAR}n"
 		exit 1
