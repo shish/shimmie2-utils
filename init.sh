@@ -34,6 +34,6 @@ sudo mysql -uroot -pshimmie -e "grant all on *.* to 'shimmie'@'localhost'";
 
 echo "Configuring web server"
 sudo rm -f /etc/nginx/sites-enabled/default
-sed "s/@INSTALLDIR@/`pwd`/" shimmie2-utils/shimtest.nginx.conf | sudo tee /etc/nginx/sites-available/shimtest > /dev/null
+sed "s#@INSTALLDIR@#`pwd`#" shimmie2-utils/shimtest.nginx.conf | sudo tee /etc/nginx/sites-available/shimtest > /dev/null
 sudo ln -sf /etc/nginx/sites-available/shimtest /etc/nginx/sites-enabled/shimtest
 sudo /etc/init.d/nginx reload
