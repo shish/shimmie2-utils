@@ -42,8 +42,8 @@ function clean() {
 		mysql -u$DB_USER -p$DB_PASS -e "create database $DB_NAME;"
 	elif [ "$DB_TYPE" == "p" ] ; then
 		export PGPASSWORD=$DB_PASS
-		psql -U$DB_USER -c "drop database $DB_NAME;"
-		psql -U$DB_USER -c "create database $DB_NAME with owner $DB_USER encoding 'utf8';"
+		psql -q -h$DB_HOST -U$DB_USER template1 -c "drop database $DB_NAME;"
+		psql -q -h$DB_HOST -U$DB_USER template1 -c "create database $DB_NAME with owner $DB_USER encoding 'utf8';"
 	else
 		printf " ${RED}invalid database type${CLEAR}\n"
 		exit 1
