@@ -42,7 +42,7 @@ function clean() {
 		export PGPASSWORD=$DB_PASS
 		pg_dump -U$DB_USER $DB_NAME | grep ^DROP | psql -U$DB_USER $DB_NAME
 	else
-		printf " ${RED}invalid database type${CLEAR}n"
+		printf " ${RED}invalid database type${CLEAR}\n"
 		exit 1
 	fi
 }
@@ -56,7 +56,7 @@ function create_conf() {
 	elif [ "$DB_TYPE" == "p" ] ; then
 		echo "pgsql:user=$DB_USER;password=$DB_PASS;host=$DB_HOST;dbname=$DB_NAME" > auto_install.conf
 	else
-		printf " ${RED}invalid database type${CLEAR}n"
+		printf " ${RED}invalid database type${CLEAR}\n"
 		exit 1
 	fi
 }
