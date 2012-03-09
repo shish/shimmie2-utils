@@ -33,6 +33,9 @@ sudo mysql -uroot -pshimmie -e "create user 'shimmie'@'localhost' identified by 
 sudo mysql -uroot -pshimmie -e "grant all on *.* to 'shimmie'@'localhost'";
 
 echo "Configuring web server"
+mkdir logs
+sudo chgrp www-data logs
+sudo chmod g+w logs
 sudo rm -f /etc/nginx/sites-enabled/default
 sed "s#@INSTALLDIR@#`pwd`#" shimmie2-utils/shimtest.nginx.conf | sudo tee /etc/nginx/sites-available/shimtest > /dev/null
 sudo ln -sf /etc/nginx/sites-available/shimtest /etc/nginx/sites-enabled/shimtest
