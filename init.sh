@@ -1,6 +1,12 @@
 #!/bin/bash
 
 echo "Checking out source code..."
+
+cd `dirname $0/..`
+if [ ! -d shimmie2-utils ] ; then
+	git clone git@github.com:shish/shimmie2-utils.git
+fi
+
 git clone git@github.com:shish/shimmie2.git 2.Xm
 cp -r 2.Xm 2.Xp
 cp -r 2.Xm 2.Xs
