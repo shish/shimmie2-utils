@@ -16,7 +16,7 @@
 HOST=`hostname`                                # domain name of the installations
 CWD=`pwd`
 DIR=`basename $CWD`                            # install path relative to webroot
-DB_TYPE=`echo $DIR | sed "s/.*(.)/1/g"`        # last letter, eg "s", "m", or "p"
+DB_TYPE=`echo $DIR | sed "s/.*\(.\)/\1/g"`     # last letter, eg "s", "m", or "p"
 DB_NAME=s`echo $DIR | sed "s/[^a-z0-9]//g"`    # install path should be uniqueish
 DB_HOST="localhost"
 DB_USER="shimmie"
@@ -37,10 +37,13 @@ function clean() {
 	if [ "$DB_TYPE" == "s" ] ; then
 		rm -f $DB_NAME.sdb
 	elif [ "$DB_TYPE" == "m" ] ; then
-		(echo "set foreign_key_checks=off;" && mysqldump -u$DB_USER -p$DB_PASS --add-drop-table --no-data $DB_NAME | grep ^DROP) | mysql -u$DB_USER -p$DB_PASS $DB_NAME
+		#(echo "set foreign_key_checks=off;" && mysqldump -u$DB_USER -p$DB_PASS --add-drop-table --no-data $DB_NAME | grep ^DROP) | mysql -u$DB_USER -p$DB_PASS $DB_NAME
+		mysql -u$DB_USER -p$DB_PASS -e "drop database $DB_NAME;"
+		mysql -u$DB_USER -p$DB_PASS -e "create database $DB_NAME;"
 	elif [ "$DB_TYPE" == "p" ] ; then
 		export PGPASSWORD=$DB_PASS
-		pg_dump -U$DB_USER $DB_NAME | grep ^DROP | psql -U$DB_USER $DB_NAME
+		psql -U$DB_USER -c "drop database $DB_NAME;"
+		psql -U$DB_USER -c "create database $DB_NAME with owner $DB_USER encoding 'utf8';"
 	else
 		printf " ${RED}invalid database type${CLEAR}\n"
 		exit 1
