@@ -40,3 +40,6 @@ sudo rm -f /etc/nginx/sites-enabled/default
 sed "s#@INSTALLDIR@#`pwd`#" shimmie2-utils/shimtest.nginx.conf | sudo tee /etc/nginx/sites-available/shimtest > /dev/null
 sudo ln -sf /etc/nginx/sites-available/shimtest /etc/nginx/sites-enabled/shimtest
 sudo /etc/init.d/nginx reload
+
+sed "s#@USER@#`whoami`#" shimmie2-utils/shimtest.php-fpm.conf | sudo tee /etc/php5/fpm/pool.d/shimtest.conf > /dev/null
+sudo /etc/init.d/php5-fpm reload
