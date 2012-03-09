@@ -26,3 +26,8 @@ for n in 2.?? ; do
 	ln -s ../contrib/simpletest ./
 	cd ../..
 done
+
+echo "Creating database users"
+sudo -u postgres psql -c "create user shimmie with password 'shimmie' createdb;"
+sudo mysql -uroot -pshimmie -e "create user 'shimmie'@'localhost' identified by 'shimmie'";
+sudo mysql -uroot -pshimmie -e "grant all on *.* to 'shimmie'@'localhost'";
