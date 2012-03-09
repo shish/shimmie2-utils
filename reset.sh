@@ -27,8 +27,8 @@ RED="\e[01;31m";
 GREEN="\e[01;32m"
 CLEAR="\e[0m"
 
-function ok() { printf " ${GREEN}done${CLEAR}n" ; }
-function not() { printf " ${RED}failed${CLEAR}n" ; exit 1 ; }
+function ok() { printf " ${GREEN}done${CLEAR}\n" ; }
+function not() { printf " ${RED}failed${CLEAR}\n" ; exit 1 ; }
 
 
 function clean() {
