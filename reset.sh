@@ -70,7 +70,7 @@ function install_base() {
 }
 
 function create_user() {
-	curl --silent -d name=$1 -d pass1=$1 -d pass2=$1 -d email= 
+	curl --silent -d name=$1 -d pass1=$1 -d pass2=$1 -d email= \
 			http://$HOST/$DIR/user_admin/create > /dev/null
 }
 
