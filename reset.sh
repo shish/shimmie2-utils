@@ -23,9 +23,9 @@ DB_USER="shimmie"
 DB_PASS="shimmie"
 
 
-RED="e[01;31m";
-GREEN="e[01;32m"
-CLEAR="e[0m"
+RED="\e[01;31m";
+GREEN="\e[01;32m"
+CLEAR="\e[0m"
 
 function ok() { printf " ${GREEN}done${CLEAR}n" ; }
 function not() { printf " ${RED}failed${CLEAR}n" ; exit 1 ; }
