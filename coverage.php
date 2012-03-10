@@ -111,9 +111,11 @@ function coverage_summary($file, $array) {
 	}
 
 	$total = 0;
+	$total_inc_blank = 0;
 	$hit = 0;
 	foreach($array as $value) {
-		if($value != 0) $total++;
+		if($value != 0) $total_inc_blank++;
+		if($value >= 0) $total++;
 		if($value >  0) $hit++;
 	}
 
