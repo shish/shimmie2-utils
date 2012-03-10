@@ -146,8 +146,10 @@ foreach($files as $file => $coverage) {
 		rel($file),
 		$csum);
 }
-printf("<tr><td>Files tested</td><td>%4.2f</td></tr>", $total/$count);
-printf("<tr><td>Lines tested</td><td>%4.2f</td></tr>", ($global_hits/$global_lines)*100);
+if($count > 0 && $global_lines > 0) {
+	printf("<tr><td>Files tested</td><td>%4.2f</td></tr>", $total/$count);
+	printf("<tr><td>Lines tested</td><td>%4.2f</td></tr>", ($global_hits/$global_lines)*100);
+}
 print "</table>";
 
 foreach($files as $file => $coverage) {
