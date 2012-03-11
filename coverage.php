@@ -136,12 +136,10 @@ foreach($files as $file => $coverage) {
 	$total += $csum;
 	$count++;
 
-	$class = "miss";
-	if($csum > 95.0) $class = "near";
-	if($csum > 99.0) $class = "hit";
+	$colour = "hsl(" . (max($csum-40, 0)*1.6) . ", 50%, 75%)";
 
-	printf("<tr class='%s'><td><a href='#%s'>%s</a></td><td>%4.2f</td></tr>",
-		$class,
+	printf("<tr style='background: %s'><td><a href='#%s'>%s</a></td><td>%4.2f</td></tr>",
+		$colour,
 		urlencode(rel($file)),
 		rel($file),
 		$csum);
