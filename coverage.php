@@ -158,7 +158,7 @@ foreach($files as $file => $coverage) {
 	print "<pre>";
 	$lines = explode("\n", file_get_contents($file));
 	for($i=0; $i<count($lines); $i++) {
-		$exes = isset($coverage[$i+1]) ? $coverage[$i+1] : "-3";
+		$exes = isset($coverage[$i+1]) ? $coverage[$i+1] : -2;
 
 		if($exes == -1 && blank($lines[$i])) $exes = 0;
 
