@@ -44,7 +44,7 @@ $files = array();
 foreach(array_merge(glob("$dir/*.blog"), glob("$dir/*.log")) as $clog_file) {
 	$clog_file = rel($clog_file);
 	if($verbose) print "<p>Loading data from $clog_file...";
-	$data = unserialize(file_get_contents($clog_file));
+	$data = unserialize(gzinflate(file_get_contents($clog_file)));
 	foreach($data as $filename => $coverage) {
 		$filename = rel($filename);
 
@@ -88,7 +88,7 @@ foreach(array_merge(glob("$dir/*.blog"), glob("$dir/*.log")) as $clog_file) {
 		}
 	}
 	unlink($clog_file);
-	file_put_contents("$dir/archive.blog", serialize($files));
+	file_put_contents("$dir/archive.blog", gzdeflate(serialize($files)));
 }
 
 ksort($files);
