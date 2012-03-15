@@ -29,8 +29,8 @@ function parse_rows($db) {
 				$base = $row['comment'];
 				if(!is_null($user)) {
 					$new = str_replace(">>$image_id$sep$comment_id", "[url=site://post/view/{$image_id}#c{$comment_id}]@{$user}[/url]", $base);
-					print "\n\n----\n$comment_id\n--\n$base\n--\n$new";
-					update_comment($db, $comment_id, $new);
+					print "\n\n----\n{$row['id']}\n--\n$base\n--\n$new";
+					update_comment($db, $row['id'], $new);
 				}
 			}
 		}
