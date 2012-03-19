@@ -110,43 +110,36 @@ function coverage_summary($file, $array) {
 		if($hits == -1 && blank($lines[$linenum-1])) $array[$linenum] = 0;
 	}
 
-	$total = 0;
-	$total_inc_blank = 0;
 	$hit = 0;
+	$miss = 0;
+	$blank = 0;
 	foreach($array as $value) {
-		if($value != 0) $total_inc_blank++;
-		if($value >= 0) $total++;
-		if($value >  0) $hit++;
+		if($value == -2) $blank++;
+		if($value == -1) $miss++;
+		if($value ==  0) $blank++;
+		if($value >=  1) $hit++;
 	}
 
-	$global_lines += $total;
+	$global_lines += $hit + $miss;
 	$global_hits  += $hit;
 
-	return $hit/$total;
+	return $hit/($hit+$miss);
 }
 
 print "<h2>Summary</h2>";
 print "<table>";
 print "<tr><td>Filename</td><td>Coverage</td></tr>";
-$total = 0;
-$count = 0;
 foreach($files as $file => $coverage) {
 	$csum = coverage_summary($file, $coverage)*100;
 
-	$total += $csum;
-	$count++;
-
-	$colour = "hsl(" . (max($csum-40, 0)*1.6) . ", 50%, 75%)";
-
 	printf("<tr style='background: %s'><td><a href='#%s'>%s</a></td><td>%4.2f</td></tr>",
-		$colour,
+		"hsl(" . (max($csum-40, 0)*1.6) . ", 50%, 75%)",
 		urlencode(rel($file)),
 		rel($file),
 		$csum);
 }
-if($count > 0 && $global_lines > 0) {
-	printf("<tr><td>Files tested</td><td>%4.2f</td></tr>", $total/$count);
-	printf("<tr><td>Lines tested</td><td>%4.2f</td></tr>", ($global_hits/$global_lines)*100);
+if($global_lines > 0) {
+	printf("<tr><td>Total</td><td><b>%4.2f</b></td></tr>", ($global_hits/$global_lines)*100);
 }
 print "</table>";
 
