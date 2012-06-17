@@ -35,7 +35,7 @@ function rel($path) {
 	return str_replace(getcwd()."/", "", $path);
 }
 
-$base = isset($_GET["base"]) ? $_GET["base"] : "2.3m";
+$base = isset($_GET["base"]) ? $_GET["base"] : "2.Xm";
 $dir = "$base/data/coverage";
 $verbose = false;
 
@@ -44,7 +44,7 @@ $files = array();
 foreach(array_merge(glob("$dir/*.blog"), glob("$dir/*.log")) as $clog_file) {
 	$clog_file = rel($clog_file);
 	if($verbose) print "<p>Loading data from $clog_file...";
-	$data = unserialize(file_get_contents($clog_file));
+	$data = unserialize(gzinflate(file_get_contents($clog_file)));
 	foreach($data as $filename => $coverage) {
 		$filename = rel($filename);
 
@@ -88,7 +88,7 @@ foreach(array_merge(glob("$dir/*.blog"), glob("$dir/*.log")) as $clog_file) {
 		}
 	}
 	unlink($clog_file);
-	file_put_contents("$dir/archive.blog", serialize($files));
+	file_put_contents("$dir/archive.blog", gzdeflate(serialize($files)));
 }
 
 ksort($files);
@@ -110,42 +110,37 @@ function coverage_summary($file, $array) {
 		if($hits == -1 && blank($lines[$linenum-1])) $array[$linenum] = 0;
 	}
 
-	$total = 0;
 	$hit = 0;
+	$miss = 0;
+	$blank = 0;
 	foreach($array as $value) {
-		if($value != 0) $total++;
-		if($value >  0) $hit++;
+		if($value == -2) $blank++;
+		if($value == -1) $miss++;
+		if($value ==  0) $blank++;
+		if($value >=  1) $hit++;
 	}
 
-	$global_lines += $total;
+	$global_lines += $hit + $miss;
 	$global_hits  += $hit;
 
-	return $hit/$total;
+	return $hit/($hit+$miss);
 }
 
 print "<h2>Summary</h2>";
 print "<table>";
 print "<tr><td>Filename</td><td>Coverage</td></tr>";
-$total = 0;
-$count = 0;
 foreach($files as $file => $coverage) {
 	$csum = coverage_summary($file, $coverage)*100;
 
-	$total += $csum;
-	$count++;
-
-	$class = "miss";
-	if($csum > 95.0) $class = "near";
-	if($csum > 99.0) $class = "hit";
-
-	printf("<tr class='%s'><td><a href='#%s'>%s</a></td><td>%4.2f</td></tr>",
-		$class,
+	printf("<tr style='background: %s'><td><a href='#%s'>%s</a></td><td>%4.2f</td></tr>",
+		"hsl(" . (max($csum-40, 0)*1.6) . ", 50%, 75%)",
 		urlencode(rel($file)),
 		rel($file),
 		$csum);
 }
-printf("<tr><td>Files tested</td><td>%4.2f</td></tr>", $total/$count);
-printf("<tr><td>Lines tested</td><td>%4.2f</td></tr>", ($global_hits/$global_lines)*100);
+if($global_lines > 0) {
+	printf("<tr><td>Total</td><td><b>%4.2f</b></td></tr>", ($global_hits/$global_lines)*100);
+}
 print "</table>";
 
 foreach($files as $file => $coverage) {
@@ -154,7 +149,7 @@ foreach($files as $file => $coverage) {
 	print "<pre>";
 	$lines = explode("\n", file_get_contents($file));
 	for($i=0; $i<count($lines); $i++) {
-		$exes = $coverage[$i+1];
+		$exes = isset($coverage[$i+1]) ? $coverage[$i+1] : -2;
 
 		if($exes == -1 && blank($lines[$i])) $exes = 0;
 
