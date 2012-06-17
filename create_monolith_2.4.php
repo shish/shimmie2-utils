@@ -3,32 +3,11 @@
 define("THEME", "default");
 define("RECURSE_INCLUDE", false);
 
+require_once "core/sys_config.inc.php";
 require_once "core/util.inc.php";
 
-$included = array();
-
-function manual_include($fname) {
-	global $included;
-	if(in_array($fname, $included)) return;
-	$included[] = $fname;
-	print "$fname\n";
-	$text = file_get_contents($fname);
-	$text = preg_replace('/^<\?php/', '', $text);
-	$text = preg_replace('/\?>$/', '', $text);
-	// most requires are built-in, but we want /lib separately
-	$text = str_replace('require_', '// require_', $text);
-	$text = str_replace('function _d(', '// function _messed_d(', $text);
-	$text = str_replace('// require_once "lib', 'require_once "lib', $text);
-	if(RECURSE_INCLUDE) {
-		#text = preg_replace('/require_once "(.*)";/e', "manual_include('$1')", $text);
-	}
-	#$text = preg_replace('/_d\(([^,]*), (.*)\);/', 'if(!defined(\1)) define(\1, \2);', $text);
-	return $text;
-}
-
 $text = '<'."?php\n";
-$text .= manual_include("config.php");
-$text .= manual_include("core/default_config.inc.php");
+$text .= manual_include("core/sys_config.inc.php");
 $text .= manual_include("core/util.inc.php");
 $text .= manual_include("lib/context.php");
 $text .= '
@@ -42,17 +21,15 @@ if(COVERAGE) {
 }
 _version_check();
 _sanitise_environment();
-_start_cache();
 ';
 
 $text .= '
 try {
 	// load base files
-	ctx_log_start("Initialisation");
 	ctx_log_start("Opening files");
 ';
 
-	$files = array_merge(glob("core/*.php"), glob("ext/*/main.php"));
+	$files = array_merge(zglob("core/*.php"), zglob("ext/{".ENABLED_EXTS."}/main.php"));
 	foreach($files as $filename) {
 		$text .= manual_include($filename);
 	}
@@ -75,19 +52,24 @@ $text .= '
 
 $text .= '
 	_load_extensions();
-	ctx_log_endok("Initialisation");
 
-	ctx_log_start("Page generation");
 	// start the page generation waterfall
+	ctx_log_start("Page generation");
 	$page = class_exists("CustomPage") ? new CustomPage() : new Page();
 	$user = _get_user();
 	send_event(new InitExtEvent());
-	send_event(_get_page_request());
-	$page->display();
+	if(!is_cli()) { // web request
+		send_event(new PageRequestEvent(@$_GET["q"]));
+		$page->display();
+	}
+	else { // command line request
+		send_event(new CommandEvent($argv));
+	}
 	ctx_log_endok("Page generation");
 
+	// saving cache data and profiling data to disk can happen later
+	if(function_exists("fastcgi_finish_request")) fastcgi_finish_request();
 	$database->db->commit();
-	_end_cache();
 	ctx_log_endok();
 }
 catch(Exception $e) {
